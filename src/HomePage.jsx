@@ -529,7 +529,7 @@ console.log(count)
 
     <div className=' h-96 h-fit    ' >
     <Group justify=" " className='text-center flex justify-center  w-screen md:justify-start' mt="md" mb="xs">
-        <Text className='text-2xl text-center text-blue-600 ' fw={900}>Perago`s Company Structure</Text>
+        <Text className='text-2xl text-center md:ml-10 text-blue-600 ' fw={900}>Perago`s Company Structure</Text>
       </Group>
     </div>
     <Card className='flex flex-col sticky items-center justify-center  items-center bg-transparent py-10 mb-8'  padding="lg"  >
