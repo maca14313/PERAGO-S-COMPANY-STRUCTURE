@@ -1,21 +1,25 @@
-import { MantineProvider } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import "./App.css";
 import "./index.css";
 
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import HomePage from './HomePage';
+import AddNewPosition from './AddNewPosition';
+
 function App() {
-    const form = useForm({
-      initialValues: {
-        name: "",
-        email: "",
-      },
-    });
+
+  
+
+   
   return (
-    <MantineProvider>
-      <div>
-        Hello World!
-      </div>
-    </MantineProvider>
+ 
+<Router>
+      
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/add-new-position" element={<AddNewPosition />} />
+
+      </Routes>
+    </Router>     
   );
 }
 
