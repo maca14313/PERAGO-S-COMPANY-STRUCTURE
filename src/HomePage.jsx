@@ -527,8 +527,8 @@ console.log(count)
     <div className=' '>
 
 
-    <div className=' h-96 h-fit     p-7  ' >
-    <Group justify="space-between " className='text-center flex justify-center  w-screen md:justify-start' mt="md" mb="xs">
+    <div className=' h-96 h-fit    ' >
+    <Group justify=" " className='text-center flex justify-center  w-screen md:justify-start' mt="md" mb="xs">
         <Text className='text-2xl text-center text-blue-600 ' fw={900}>Perago`s Company Structure</Text>
       </Group>
     </div>
