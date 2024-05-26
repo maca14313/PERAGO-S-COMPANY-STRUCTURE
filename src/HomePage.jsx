@@ -528,8 +528,9 @@ console.log(count)
 
 
     <div className=' h-96 h-fit     p-7  ' >
-    <Title className='text-black   text-center md:text-start' order={2}> <Text fw={900} className='font-custom font-bold uppercase text-blue-600 '>Perago`s Company Structure</Text>
-    </Title>
+    <Group justify="space-between " className='text-center flex justify-center  w-screen md:justify-start' mt="md" mb="xs">
+        <Text className='text-2xl text-center text-blue-600 ' fw={900}>Perago`s Company Structure</Text>
+      </Group>
     </div>
     <Card className='flex flex-col sticky items-center justify-center  items-center bg-transparent py-10 mb-8'  padding="lg"  >
       
