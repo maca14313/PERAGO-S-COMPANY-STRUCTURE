@@ -11,127 +11,50 @@ import { pushTreeState,changeInTree } from './features/counter/counterSlice';
 
 
 
-
-
-
-// Sample data
-/*
-const treeData = [
-  { pId: 1, name: 'CEO', description: 'Chief Executive Officer', parentId: 0 },
-  { pId: 2, name: 'CTO', description: 'Chief Technology Officer', parentId: 1 },
-  { pId: 3, name: 'Project Manager', description: 'Manages projects', parentId: 2 },
-  { pId: 4, name: 'Product Owner', description: 'Owns product vision', parentId: 3 },
-  { pId: 5, name: 'Tech Lead', description: 'Leads technical decisions', parentId: 4 },
-  { pId: 6, name: 'Frontend Developer', description: 'Develops frontend', parentId: 5 },
-  { pId: 7, name: 'Backend Developer', description: 'Develops backend', parentId: 5 },
-  { pId: 8, name: 'DevOps Engineer', description: 'Manages infrastructure', parentId: 5 },
-  { pId: 9, name: 'QA Engineer', description: 'Ensures quality', parentId: 4 },
-  { pId: 10, name: 'Scrum Master', description: 'Facilitates Scrum', parentId: 4 },
-  { pId: 11, name: 'CFO', description: 'Chief Financial Officer', parentId: 1 },
-  { pId: 12, name: 'Chief Accountant', description: 'Manages accounting', parentId: 11 },
-  { pId: 13, name: 'Financial Analyst', description: 'Analyzes finances', parentId: 12 },
-  { pId: 14, name: 'Account and Payable', description: 'Manages payments', parentId: 12 },
-  { pId: 15, name: 'Internal Audit', description: 'Audits finances', parentId: 11 },
-  { pId: 16, name: 'COO', description: 'Chief Operating Officer', parentId: 1 },
-  { pId: 17, name: 'Product Manager', description: 'Manages product lifecycle', parentId: 16 },
-  { pId: 18, name: 'Operation Manager', description: 'Manages operations', parentId: 16 },
-  { pId: 19, name: 'Customer Relation', description: 'Handles customer relations', parentId: 16 },
-  { pId: 20, name: 'HR', description: 'Human Resources', parentId: 1 },
-]; */
-
-
-// Function to build the tree structure
-/*
-const buildTree = (flatData) => {
-  
-
-  const withChildren = {};
-  const roots = [];
-
-  flatData.forEach((item) => {
-    withChildren[item.id] = { ...item, children: [] };
-  });
-
-  flatData.forEach((item) => {
-    if (item.parentId === 0) {
-      roots.push(withChildren[item.id]);
-    } else {
-      if (withChildren[item.parentId]) {
-        withChildren[item.parentId].children.push(withChildren[item.id]);
-      }
-    }
-  });
-
-  return roots;
-}; */
-
-
-// Recursive TreeNode component
-
-
-function UpdatePage({haveChildren}) {
-  console.log(haveChildren)
-  return (
-    <div></div>
-  )
-}
-
-
-
 const Tree= ({ item, depth }) => {
+
 
   const count = useSelector((state) => state.counter.value);
   const TreeChanged = useSelector((state) => state.counter.treeChanged);
-
   const dispatch = useDispatch();
 
-console.log(count)
     const [opened, { open, close }] = useDisclosure(false);
     const [loadingD,setLoadingD] =useState(false);
     const [loadingUp,setLoadingUp] =useState(false);
     const [updateId,setUpdateId] =useState();
     const [updateLocalId,setUpdateLocalId] =useState();
-
-
-
-
     const [errorTextD, setErrorTextD] = useState('');
     const [errorTextUp, setErrorTextUp] = useState('');
+    const [isOpen, setIsOpen] = useState(true);
+    const hasChildren = item.children && item.children.length > 0;
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const onSubmit = data => console.log(data);
 
 
-  const [isOpen, setIsOpen] = useState(true);
-  const hasChildren = item.children && item.children.length > 0;
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const onSubmit = data => console.log(data);
 
 
 
   const deletePosition=async(id)=>{
+
     setErrorTextD('')
     setLoadingD(true)
-    console.log(id)
 
     const existingUser = count.filter(user => user.id == id);
-    console.log(existingUser[0].pId)
     const existingChildren = count.filter(user => user.parentId == existingUser[0].pId);
-    console.log(existingChildren.length)
-
-
 
 
     try {
+
       if(existingChildren.length!=0 ){
-        console.log('here')
-      
-        
       
         existingChildren.forEach(async(p) => {
         await axios.put(`${firebaseUrl}/position/${p.id}.json`,{name:p.name, description:p.description,parentId:existingUser[0].parentId,pId:p.pId});
+
       });
   
-      console.log('here1')
       const deleteData=  await axios.delete(`${firebaseUrl}/position/${id}.json`);
+
       dispatch(pushTreeState(count.filter(po => po.id !== id )))
       setLoadingD(false)
       dispatch(changeInTree())
@@ -139,8 +62,9 @@ console.log(count)
   
       
       }else{
-        console.log('here2')
+
         const deleteData=  await axios.delete(`${firebaseUrl}/position/${id}.json`);
+
         dispatch(pushTreeState(count.filter(po => po.id !== id )))
         setLoadingD(false)
         dispatch(changeInTree())
@@ -155,18 +79,22 @@ console.log(count)
 
   }
  
+
+
+
   const onUpdate = async (data) => {
     setErrorTextUp('')
 
-    console.log(updateId)
-    console.log(updateLocalId)
+    
 
     let updatedPosition=count.filter(user => user.pId == updateLocalId);
 
 let haveChildren=count.filter(user => user.parentId == updateLocalId);
 
    if (data.parentId != updateLocalId) {
+
     if(haveChildren.length!=0){
+
       let matchingChildren = [];
   
   haveChildren.forEach(obj => {
@@ -179,6 +107,7 @@ let haveChildren=count.filter(user => user.parentId == updateLocalId);
   console.log("Initial Matching Children:", matchingChildren);
   
   let result = [];
+
   while (matchingChildren.length > 0) {
     result.push(...matchingChildren);
   
@@ -190,7 +119,10 @@ let haveChildren=count.filter(user => user.parentId == updateLocalId);
     // Update matchingChildren for the next iteration
     matchingChildren = nextLevel;
   }
+
+
   const mergedArray = haveChildren.concat(result);
+
   console.log("Final Result:", result);
   console.log(mergedArray)
   const onTheChildren=mergedArray.filter(user => user.pId == data.parentId);
@@ -254,66 +186,20 @@ let haveChildren=count.filter(user => user.parentId == updateLocalId);
    }
 
 
-/*
-
-*/
-   
-
-/*
-    setLoadingUp(true) 
-    */
 
   
-/*
-    try {
-
-      setErrorTextUp('')
-
-          const olderParentId = count.filter(user => user.pId == updateLocalId);
-        const updatedData = {name:data.name, description:data.description,parentId:olderParentId[0].parentId,pId:updateLocalId};
-      await axios.put(`${firebaseUrl}/position/${updateId}.json`,updatedData);
-      dispatch(pushTreeState(count.map(po => po.id === updateId ? { updateId, ...updatedData } : po)))
-
-     setLoadingUp(false)
-     dispatch(changeInTree())
-      
-    } catch (error) {
-      console.error('Error updating user:', error);
-      setLoadingUp(false)
-        setErrorTextUp(error.message)
-    }
-
-    */
 
     
 
-   /* try {
-      if (existingUser[0].parentId!=updateLocalId){
-        await axios.put(`${firebaseUrl}/position/${updateId}.json`,updatedData);
-        setLoadingUp(false)
-        dispatch(pushTreeState(count.map(po => po.id === updateId ? { updateId, ...updatedData } : po)))
-      }else if(existingUser[0].parentId==updateLocalId){
-        if(existingUser[0].parentId==updateLocalId){
-      const existingChildren = count.filter(user => user.parentId == updateLocalId);
-    }
-        setErrorTextUp('the parent cannot be the child')
-
-      }
-
-      //setUsers(count.map(po => po.id === id ? { id, ...updatedData } : po));
-    } catch (error) {
-      console.error('Error updating user:', error);
-      setLoadingUp(false)
-        setErrorTextUp(error.message)
-      
-
-    } */
+   
   };
 
-  console.log(watch("example"));
   return (
     <div className='flex p-3 ' >
+
+
         <Modal opened={opened} onClose={close} title="Employee Position" className='text-sm'>
+
         <Card shadow="sm" padding="lg" radius="md" withBorder>
       
 
@@ -338,7 +224,9 @@ let haveChildren=count.filter(user => user.parentId == updateLocalId);
       Delete 
       </Button>}
       </Group>
+
     </Card>
+
 
 
     <Accordion defaultValue="">
@@ -354,7 +242,6 @@ let haveChildren=count.filter(user => user.parentId == updateLocalId);
           {errorTextUp}
         </Button>:''} 
 
-      {errors.exampleRequired && <span>cannot be empty</span>}
       <TextInput
       defaultValue={item.name}
       {...register('name', { required: true,maxLength:100 })}
@@ -431,6 +318,12 @@ let haveChildren=count.filter(user => user.parentId == updateLocalId);
   );
 };
 
+
+
+
+
+
+
 // Main App component
 const HomePage = () => {
 
@@ -439,7 +332,6 @@ const HomePage = () => {
 
   const dispatch = useDispatch();
 
-console.log(count)
   const [treeData,setTreeData]=useState([])
   const [newPosition,setNewPosition]=useState([])
 
@@ -448,30 +340,23 @@ console.log(count)
 
   const [errorText, setErrorText] = useState('');
 
-  const demoProps = {
-    sx: (theme) => ({
-      backgroundColor: theme.colors.brand[6],
-      height: 50,
-      marginTop: theme.spacing.md,
-      '&:hover': {
-        backgroundColor: theme.colors.brand[7],
-      },
-    }),
-  };
+  
 
 
 
   useEffect(() => {
+
     const fetchData=async()=>{
 
        try {
+
         setLoadingStructure(true)
-         const response=await axios.get(`${firebaseUrl}/position.json`)
-       const data = response.data;
-   const usersArray = data ? Object.entries(data).map(([key, value]) => ({ id: key, ...value })) : [];
-   console.log(usersArray.map((m)=>m.id))
+
+             const response=await axios.get(`${firebaseUrl}/position.json`)
+             const data = response.data;
+             const usersArray = data ? Object.entries(data).map(([key, value]) => ({ id: key, ...value })) : [];
+
    //setTreeData(usersArray);
-   console.log(usersArray)
    dispatch(pushTreeState(usersArray))
    setLoadingStructure(false)
 
@@ -505,7 +390,7 @@ console.log(count)
     flatData.forEach((item) => {
       withChildren[item.pId] = { ...item, children: [] };
     });
-  
+     
     flatData.forEach((item) => {
       if (item.parentId === 0) {
         roots.push(withChildren[item.pId]);
@@ -515,13 +400,12 @@ console.log(count)
         }
       }
     });
-    console.log(withChildren)
+    console.log(roots)
     return roots;
   };
 
   
   const hierarchicalData = buildTree(count);
-  console.log(hierarchicalData)
 
   return (
     <div className=' '>

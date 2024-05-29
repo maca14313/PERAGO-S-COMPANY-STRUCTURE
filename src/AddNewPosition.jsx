@@ -20,17 +20,16 @@ import { pushTreeState,changeInTree } from './features/counter/counterSlice';
 
 
 function AddNewPosition() {
+
   const count = useSelector((state) => state.counter.value);
   const TreeChanged = useSelector((state) => state.counter.treeChanged);
-
-  console.log(count)
   const dispatch = useDispatch();
-    const { register, handleSubmit, watch, formState: { errors }  } = useForm();
+  const { register, handleSubmit, watch, formState: { errors }  } = useForm();
+
      const [treeData,setTreeData]=useState(count)
      const [newPosition,setNewPosition]=useState([])
-
      const [loading,setLoading] =useState(false);
-    const [errorText, setErrorText] = useState('');
+     const [errorText, setErrorText] = useState('');
 
 
     const onAdd=async(data)=>{
@@ -40,13 +39,12 @@ function AddNewPosition() {
             
             const response=  await axios.post(`${firebaseUrl}/position.json`,addedData);
             const resPosition = { id: response.data.name, ...addedData };
-            console.log(resPosition.name) 
+
             setNewPosition(resPosition) 
-            //setNewPosition([...newPosition,resPosition])          
             setLoading(false)
 
         } catch (error) {
-            console.log(error)
+
             setLoading(false)
             setErrorText(error.message)
         }
@@ -54,25 +52,25 @@ function AddNewPosition() {
     }
 
     useEffect(() => {
+
        const fetchData=async()=>{
+
           try {
+
             const response=await axios.get(`${firebaseUrl}/position.json`)
-          const data = response.data;
-      const usersArray = data ? Object.entries(data).map(([key, value]) => ({ id: key, ...value })) : [];
-      console.log(usersArray.map((m)=>m.id))
-      console.log(usersArray);
+            const data = response.data;
+            const usersArray = data ? Object.entries(data).map(([key, value]) => ({ id: key, ...value })) : [];
+      
       dispatch(pushTreeState(usersArray))
+
           } catch (error) {
-            console.log(error.message)
             setErrorText(error.message)
           }
        }
 
        fetchData()
-       console.log(newPosition)
 
       
-       console.log(1)
     }, [newPosition]);
 
    
@@ -80,15 +78,20 @@ function AddNewPosition() {
     
   return (
     <div className='flex flex-col items-center justify-center w-screen h-screen'>
+
          {newPosition!=''?<Alert className='w-4/6 mb-7' variant="light" color="blue" title='New Position' >
           <Text className='flex  gap-2'><div className='font-bold ml-2'>Name</div>  {newPosition?.name}</Text> 
           <Text className='flex  gap-2'> <div className='font-bold ml-2'>Description  </div>  {newPosition?.description}  </Text>
           
-       </Alert>:''}
+          </Alert>:''}
+
+
          <form onSubmit={handleSubmit(onAdd)} className='flex flex-col  items-center justify-center bg-white  w-4/5 md:w-96  h-3/5  rounded-md shadow-xl'>
           <Title className=' p-8 text-center' order={5}>
          Add a position to our dynamic tree view app
           </Title>
+
+
       {errorText!=''?<Button  className='text-xs text-red-700 border-red-500 mb-3 h-12 w-4/6 md:w-4/6 ' variant="outline" >
           {errorText}
         </Button>:''} 
@@ -122,12 +125,13 @@ function AddNewPosition() {
 
 
 
-<div className='flex justify-start  items-end pb-1 h-9 w-4/5 font-normal text-gray-500 md:w-4/5'><label htmlFor="parentId" className='text-xs '>Reports to</label></div>
-<select id='parentId' {...register('parentId',{ required: true })} className='uppercase text-xs  w-4/5 h-9 pl-2 md:w-4/5 border rounded-sm'>
-  {count.map((item) => (
+      <div className='flex justify-start  items-end pb-1 h-9 w-4/5 font-normal text-gray-500 md:w-4/5'><label htmlFor="parentId" className='text-xs '>Reports to</label></div>
+      <select id='parentId' {...register('parentId',{ required: true })} className='uppercase text-xs  w-4/5 h-9 pl-2 md:w-4/5 border rounded-sm'>
+      {count.map((item) => (
             <option type="number" key={item.pId} value={item.pId} >{item.name}</option>
-  ))}
-  </select>
+       ))}
+     </select>
+
   {errors.parentId && <span className='text-red-500 text-xs p-3'>You have to choose one from the list</span>}
 
 
