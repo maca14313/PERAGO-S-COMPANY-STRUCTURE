@@ -295,7 +295,7 @@ let haveChildren=count.filter(user => user.parentId == updateLocalId);
         </Modal>
 
     <div className="relative" style={{ paddingLeft: `${depth * 20}px` }}>
-        <div className='tree-node-line absolute bottom-0 left-0 h-[calc(100%+10px)] w-2 bg-customColor-100  '></div>
+        <div className='tree-node-line absolute bottom-1 left-0 -z-10 h-[calc(100%+10px)] w-2 bg-customColor-100  '></div>
         
       <div className="mt-3 relative" >
       <Button className='bg-white text-black hover:text-white  active:bg-gray-200 text-xs tracking-wide uppercase'  onClick={open}>{item.name}
